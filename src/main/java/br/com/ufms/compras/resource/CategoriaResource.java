@@ -1,6 +1,7 @@
 package br.com.ufms.compras.resource;
 
 import br.com.ufms.compras.entity.Categoria;
+import br.com.ufms.compras.exception.StandartError;
 import br.com.ufms.compras.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CategoriaResource {
     private CategoriaService categoriaService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public ResponseEntity<?> testandoRest(@PathVariable("id") Long id) {
+    public ResponseEntity<?> buscarCategoriaPorId(@PathVariable("id") Long id) {
         Categoria categoria = categoriaService.buscarCategoriaPorId(id);
         return ResponseEntity.ok().body(categoria);
     }

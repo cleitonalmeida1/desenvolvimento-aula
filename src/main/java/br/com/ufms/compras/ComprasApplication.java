@@ -2,8 +2,11 @@ package br.com.ufms.compras;
 
 import br.com.ufms.compras.entity.Categoria;
 import br.com.ufms.compras.entity.Cidade;
+import br.com.ufms.compras.entity.Cliente;
+import br.com.ufms.compras.entity.Endereco;
 import br.com.ufms.compras.entity.Estado;
 import br.com.ufms.compras.entity.Produto;
+import br.com.ufms.compras.entity.enumeration.TipoClienteEnum;
 import br.com.ufms.compras.repository.CategoriaRepository;
 import br.com.ufms.compras.repository.CidadeRepository;
 import br.com.ufms.compras.repository.EstadoRepository;
@@ -75,6 +78,14 @@ public class ComprasApplication implements CommandLineRunner {
 
         estadoRepository.save(Arrays.asList(est1, est2));
         cidadeRepository.save(Arrays.asList(c1, c2, c3));
+
+        Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoClienteEnum.PESSOAFISICA);
+        cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+
+        Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 203", "Jardim", "38220834", cli1, c1);
+        Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+
+        cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 
     }
 }

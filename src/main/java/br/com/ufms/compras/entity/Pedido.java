@@ -1,0 +1,110 @@
+package br.com.ufms.compras.entity;
+
+import org.omg.PortableInterceptor.ServerRequestInfo;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+
+
+@Entity
+@Table(name = "tb_pedido")
+@SequenceGenerator(name = "seq_pedido", sequenceName = "seq_pedido")
+public class Pedido implements Serializable {
+
+    @Id
+    @Column(name = "pe_id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_pedido")
+    private Long id;
+
+    @Column(name = "pe_instante")
+    private Date instante;
+
+    @ManyToOne
+    @JoinColumn(name = "en_id")
+    private Endereco enderecoDeEntrega;
+
+    @ManyToOne
+    @JoinColumn(name = "cl_id")
+    private Cliente cliente;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
+    private Pagamento pagamento;
+
+    public Pedido(){
+
+    }
+
+    public Pedido(Long id, Date instante, Endereco enderecoDeEntrega, Cliente cliente) {
+        this.id = id;
+        this.instante = instante;
+        this.enderecoDeEntrega = enderecoDeEntrega;
+        this.cliente = cliente;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getInstante() {
+        return instante;
+    }
+
+    public void setInstante(Date instante) {
+        this.instante = instante;
+    }
+
+    public Endereco getEnderecoDeEntrega() {
+        return enderecoDeEntrega;
+    }
+
+    public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+        this.enderecoDeEntrega = enderecoDeEntrega;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pedido pedido = (Pedido) o;
+        return Objects.equals(id, pedido.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
+}

@@ -1,6 +1,7 @@
 package br.com.ufms.compras.entity;
 
 import br.com.ufms.compras.entity.enumeration.EstadoPagamentoEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,11 @@ import java.util.Date;
 @Table(name = "tb_pagamento_com_boleto")
 public class PagamentoComBoleto extends Pagamento {
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "pcb_data_vencimento")
     private Date dataVencimento;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "pcb_data_pagamento")
     private Date dataPagamento;
 

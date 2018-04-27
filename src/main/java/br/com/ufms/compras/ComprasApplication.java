@@ -5,11 +5,22 @@ import br.com.ufms.compras.entity.Cidade;
 import br.com.ufms.compras.entity.Cliente;
 import br.com.ufms.compras.entity.Endereco;
 import br.com.ufms.compras.entity.Estado;
+import br.com.ufms.compras.entity.ItemPedido;
+import br.com.ufms.compras.entity.Pagamento;
+import br.com.ufms.compras.entity.PagamentoComBoleto;
+import br.com.ufms.compras.entity.PagamentoComCartao;
+import br.com.ufms.compras.entity.Pedido;
 import br.com.ufms.compras.entity.Produto;
+import br.com.ufms.compras.entity.enumeration.EstadoPagamentoEnum;
 import br.com.ufms.compras.entity.enumeration.TipoClienteEnum;
 import br.com.ufms.compras.repository.CategoriaRepository;
 import br.com.ufms.compras.repository.CidadeRepository;
+import br.com.ufms.compras.repository.ClienteRepository;
+import br.com.ufms.compras.repository.EnderecoRepository;
 import br.com.ufms.compras.repository.EstadoRepository;
+import br.com.ufms.compras.repository.ItemPedidoRepository;
+import br.com.ufms.compras.repository.PagamentoRepository;
+import br.com.ufms.compras.repository.PedidoRepository;
 import br.com.ufms.compras.repository.ProdutoRepository;
 import javafx.beans.binding.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +30,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.cache.CacheType;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +53,21 @@ public class ComprasApplication implements CommandLineRunner {
 
     @Autowired
     private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
+
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
 
     @Override
     public void run(String... strings) throws Exception {
@@ -87,5 +114,37 @@ public class ComprasApplication implements CommandLineRunner {
 
         cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 
+        clienteRepository.save(cli1);
+        enderecoRepository.save(Arrays.asList(e1, e2));
+
+        //---------------------------------------------------------------------
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+
+        Pedido ped1 = new Pedido(null, sdf.parse("30/08/2017 10:32"), e1, cli1);
+        Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), e2, cli1);
+
+        Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamentoEnum.QUITADO, ped1, 6);
+        ped1.setPagamento(pagto1);
+
+        Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamentoEnum.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+        ped2.setPagamento(pagto2);
+
+        cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+        pedidoRepository.save(Arrays.asList(ped1, ped2));
+        pagamentoRepository.save(Arrays.asList(pagto1, pagto2));
+
+        ItemPedido ip1 = new ItemPedido(p1, ped1, 0.00, 1, 2000.00);
+        ItemPedido ip2 = new ItemPedido(p3, ped1, 0.00, 2, 80.00);
+        ItemPedido ip3 = new ItemPedido(p2, ped2, 100.00, 1, 800.00);
+
+        ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+        ped2.getItens().addAll(Arrays.asList(ip3));
+
+        p1.getItens().addAll(Arrays.asList(ip1));
+        p1.getItens().addAll(Arrays.asList(ip3));
+        p1.getItens().addAll(Arrays.asList(ip2));
+
+        itemPedidoRepository.save(Arrays.asList(ip1, ip2, ip3));
     }
 }

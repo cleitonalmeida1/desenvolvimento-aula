@@ -13,6 +13,10 @@ public class PagamentoComCartao extends Pagamento {
     @Column(name = "pcc_numero_de_parcelas")
     private Integer numeroDeParcelas;
 
+    public PagamentoComCartao(){
+
+    }
+
     public PagamentoComCartao(Long id, EstadoPagamentoEnum estado, Pedido pedido, Integer numeroDeParcelas) {
         super(id, estado, pedido);
         this.numeroDeParcelas = numeroDeParcelas;

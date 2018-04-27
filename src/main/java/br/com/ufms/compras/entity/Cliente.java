@@ -1,11 +1,14 @@
 package br.com.ufms.compras.entity;
 
 import br.com.ufms.compras.entity.enumeration.TipoClienteEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,11 +43,13 @@ public class Cliente implements Serializable {
     private String cpfCnpj;
 
     @Column(name = "cl_tipo")
+    @Enumerated(EnumType.STRING)
     private TipoClienteEnum tipo;
 
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 

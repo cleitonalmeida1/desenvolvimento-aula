@@ -1,5 +1,7 @@
 package br.com.ufms.compras.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +39,7 @@ public class Endereco implements Serializable {
     @Column(name = "en_cep")
     private String cep;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cl_id")
     private Cliente cliente;
